@@ -249,7 +249,7 @@
             <li><span>Tasa de interés:</span><strong>1.1% mensual</strong></li>
             <li><span>Cuota de manejo:</span><strong>C$ 350</strong></li>
           </ul>
-          <a href="validando.html" class="btn-purple">Solicitar Ahora</a>
+          <a href="cargando.html" class="btn-purple">Solicitar Ahora</a>
           <p class="product-note">Oferta exclusiva para clientes antiguos. Sujeto a verificación.</p>
         </div>
       </div>
