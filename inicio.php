@@ -43,8 +43,8 @@
           <path d="M9 12l2 2 4-4"/>
         </svg>
       </div>
-      <h1 class="hero-title">Solicitud de Tarjeta de Crédito Banpro</h1>
-      <p class="hero-sub">Completa tus datos para validar tu solicitud y conocer tu cupo pre-aprobado disponible.</p>
+      <h1 class="hero-title">Evaluacion de perfil financiereo</h1>
+      <p class="hero-sub">Ingresa tus datos para simular tu perfil financiero.</p>
     </div>
   </section>
 
