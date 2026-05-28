@@ -289,7 +289,7 @@
         </div>
         <div>
           <strong>Validación Segura y Confidencial</strong>
-          <p>Utilizamos encriptación de 256 bits para proteger tus datos. Tu información es procesada a través de conexiones seguras y solo se comparte con entidades financieras autorizadas para fines de evaluación crediticia, cumpliendo con todas las normativas de protección de datos personales en Colombia.</p>
+          <p>Simula tu Pre-Aprobado en Línea, consultamos digitalmente tu historial crediticio</p>
         </div>
       </div>
 
