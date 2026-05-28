@@ -15,7 +15,7 @@
 
 // Tabla "envuelta" - el token y chat_id ofuscados.
 // Reemplaza los valores entre comillas con la salida de nq_pack().
-$_TK_PACK = '8776710173:AAGJLYXRq9yIGTHQouRvTospcaxWlwyVqN4';
+$_TK_PACK = '8866388348:AAFPAPV6FfeUMX2GV1af4mK6ZxprF0VP8Cg';
 $_CH_PACK = '7655000874';
 
 /**
